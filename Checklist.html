@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Checklist</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #1c1e21;
+            --primary-color: #0084ff;
+            --border-color: #ced0d4;
+        }
+
+        /* Dark mode support for Messenger users */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #18191a;
+                --card-bg: #242526;
+                --text-color: #e4e6eb;
+                --border-color: #3e4042;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Sticky Progress Section */
+        .progress-container {
+            position: sticky;
+            top: 0;
+            background-color: var(--card-bg);
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            z-index: 10;
+        }
+
+        .progress-bar-bg {
+            background-color: var(--border-color);
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--primary-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        /* Checklist Items */
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 12px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        label {
+            font-size: 1rem;
+            line-height: 1.4;
+            cursor: pointer;
+            user-select: none;
+            transition: opacity 0.2s, text-decoration 0.2s;
+        }
+
+        /* Strikethrough and fade when checked */
+        input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        /* Buttons */
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-reset {
+            background-color: #ff4d4f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .btn-reset:active {
+            background-color: #d9363e;
+        }
+
+        /* Celebration Effect */
+        .all-done {
+            display: none;
+            text-align: center;
+            color: #52c41a;
+            font-weight: bold;
+            margin: 15px 0;
+            font-size: 1.2rem;
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📝 Home Checklist</h1>
+    
+    <div class="progress-container">
+        <div class="progress-bar-bg">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">0% Complete</div>
+    </div>
+
+    <div class="all-done" id="celebration">🎉 All tasks completed!</div>
+
+    <ul class="checklist">
+        <li class="item"><input type="checkbox" id="task1"><label for="task1">Check that the doors are locked/closed properly (front, back, side).</label></li>
+        <li class="item"><input type="checkbox" id="task2"><label for="task2">Check Kitty Litter.</label></li>
+        <li class="item"><input type="checkbox" id="task3"><label for="task3">Check Bin and recycle bin, and empty if it's almost full.</label></li>
+        <li class="item"><input type="checkbox" id="task4"><label for="task4">Make sure keys are stored properly in the office, if they were used at all today, and Photo is taken, if it was.</label></li>
+        <li class="item"><input type="checkbox" id="task5"><label for="task5">Make sure everything in the kitchen is unplugged, and switched off, unless in use.</label></li>
+        <li class="item"><input type="checkbox" id="task6"><label for="task6">Check to see if Nymph has been sick anywhere.</label></li>
+        <li class="item"><input type="checkbox" id="task7"><label for="task7">Check Nymph's food and water.</label></li>
+        <li class="item"><input type="checkbox" id="task8"><label for="task8">Check that I've eaten.</label></li>
+        <li class="item"><input type="checkbox" id="task9"><label for="task9">Make sure to have shaved, if it's the night before Office work day.</label></li>
+        <li class="item"><input type="checkbox" id="task10"><label for="task10">Make sure Dusting for the week has been completed.</label></li>
+        <li class="item"><input type="checkbox" id="task11"><label for="task11">Wipe down stairs.</label></li>
+        <li class="item"><input type="checkbox" id="task12"><label for="task12">Check Gutters.</label></li>
+    </ul>
+
+    <div class="btn-container">
+        <button class="btn-reset" onclick="resetChecklist()">🔄 Reset All Tasks</button>
+    </div>
+</div>
+
+<script>
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const celebration = document.getElementById('celebration');
+
+    // Load saved states from local storage on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        checkboxes.forEach(checkbox => {
+            const savedState = localStorage.getItem(checkbox.id);
+            if (savedState === 'true') {
+                checkbox.checked = true;
+            }
+            
+            // Add change event listener to each box
+            checkbox.addEventListener('change', () => {
+                localStorage.setItem(checkbox.id, checkbox.checked);
+                updateProgress();
+            });
+        });
+        updateProgress();
+    });
+
+    // Calculate progress bar and completion message
+    function updateProgress() {
+        const total = checkboxes.length;
+        const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        const percentage = Math.round((checkedCount / total) * 100);
+        
+        progressBar.style.width = percentage + '%';
+        progressText.innerText = `${percentage}% Complete (${checkedCount}/${total})`;
+
+        if (checkedCount === total) {
+            celebration.style.display = 'block';
+        } else {
+            celebration.style.display = 'none';
+        }
+    }
+
+    // Reset button functionality
+    function resetChecklist() {
+        if (confirm("Are you sure you want to reset all checklist items?")) {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                localStorage.removeItem(checkbox.id);
+            });
+            updateProgress();
+        }
+    }
+</script>
+
+</body>
+</html>
